@@ -49,19 +49,37 @@ fastify.get('/', async (req, res) => {
 
       console.log('sendMessage', await sendMessage.json());
       const userData = await userResult.json();
-      console.log(userData);
+      console.log('userData', userData);
       const insert = {
         user_id: userData.id,
         username: userData.username,
-        email: userData.email
+        email: userData.email,
+        bearer_token: oauthData.access_token
       };
 
-      await db.from('sg_users')
-        .insert(insert)
-        .onConflict(['user_id'])
-        .merge();
+      if (userData.code !== 0) {
+        await db.from('sg_users')
+          .insert(insert)
+          .onConflict(['user_id'])
+          .merge();
+      }
 
-      return res.send(`OK, Logged as ${userData.username}#${userData.discriminator}. Please get your Token from Network!`);
+      const codeGetToken = "(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken()";
+      const html = `
+        <span>OK, Logged as ${userData.username}#${userData.discriminator}. Please get your Discord Token!</span>
+        <br/><br/>
+        <strong>How to get Discord Token?</strong>
+        <ol>
+          <li>Goto <a href="https://discord.com/app" target="_blank">discord.com/app</a> web and login</li>
+          <li>After login, run your browser developer console</li>
+          <li>Run this script:<br/>
+          <textarea rows="5" cols="70">alert(${codeGetToken})</textarea>
+          <br/>And enter.
+          </li>
+          <li>Your token will appear on browser.</li>
+        </ol>
+      `;
+      return res.type('text/html').send(html);
 
     } catch (error) {
       // NOTE: An unauthorized token will not throw an error;

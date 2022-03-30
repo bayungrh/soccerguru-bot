@@ -11,6 +11,7 @@ require('moment/locale/id');
 moment.locale('id');
 
 const CHANNELID = process.env.SG_CHANNEL_ID;
+const PREFIX = process.env.SG_PREFIX;
 
 const getAllUsers = () => db.from('sg_users').where('is_auth_error', false).whereNot('token', null);
 
@@ -35,7 +36,7 @@ const run = async () => {
           console.log("[!] Client online! SETUP...", ctx);
           await Promise.delay(5000);
           client.send(CHANNELID, {
-            content: '!cd',
+            content: `${PREFIX}cd`,
             tts: false
           });
         };
@@ -76,7 +77,7 @@ const run = async () => {
             console.log('pastDateClaim', pastDateClaim);
             if (pastDateClaim) {
               client.send(CHANNELID, {
-                content: '!claim',
+                content: `${PREFIX}claim`,
                 tts: false
               });
               hasClaimOrDaily = true;
@@ -90,7 +91,7 @@ const run = async () => {
             console.log('pastDateDaily', pastDateDaily);
             if (pastDateDaily) {
               client.send(CHANNELID, {
-                content: '!daily',
+                content: `${PREFIX}daily`,
                 tts: false
               });
               hasClaimOrDaily = true;
@@ -104,7 +105,7 @@ const run = async () => {
           if (hasClaimOrDaily || emptyNext) {
             await Promise.delay(5000);
             client.send(CHANNELID, {
-              content: '!cd',
+              content: `${PREFIX}cd`,
               tts: false
             });
           }

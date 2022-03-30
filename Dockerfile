@@ -10,7 +10,7 @@ ENV PORT=5000
 COPY package.json /usr/src/app/package.json
 
 # RUN npm install pm2 -g
-# RUN npm install --production
+RUN npm install --production
 
 COPY . /usr/src/app
 

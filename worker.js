@@ -13,7 +13,7 @@ moment.locale('id');
 const CHANNELID = process.env.SG_CHANNEL_ID;
 const PREFIX = process.env.SG_PREFIX;
 
-const getAllUsers = () => db.from('sg_users').where('is_auth_error', false).whereNot('token', null);
+const getAllUsers = () => db.from('sg_users').where('is_active', true).whereNot('token', null);
 
 const run = async () => {
   const users = await getAllUsers();

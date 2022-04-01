@@ -142,6 +142,8 @@ const run = async () => {
 
 (() => {
   console.log('[+] Job is running, running a task every 5 minute', new Date().toLocaleString());
+  // initiate run
+  run();
   cron.schedule('*/5 * * * *', () => {
     console.log('[!] Start task', new Date().toLocaleString());
     return run();

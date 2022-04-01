@@ -77,7 +77,7 @@ const run = async () => {
             console.log('pastDateClaim', pastDateClaim);
             if (pastDateClaim) {
               client.send(CHANNELID, {
-                content: `${PREFIX}claim`,
+                content: `${PREFIX}claim teori auto claim`,
                 tts: false
               });
               hasClaimOrDaily = true;

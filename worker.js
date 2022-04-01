@@ -1,11 +1,11 @@
 process.env.TZ = 'Asia/Jakarta';
 require('dotenv').config();
 const cron = require('node-cron');
-const Discord = require("discord-user-bots");
+const Discord = require('discord-user-bots');
 const moment = require('moment-timezone');
 const db = require('./utils/db');
 const Promise = require('bluebird');
-const { checkCoolDown } = require("./helper");
+const { checkCoolDown } = require('./helper');
 
 require('moment/locale/id');
 moment.locale('id');
@@ -21,7 +21,7 @@ const run = async () => {
   await Promise.mapSeries(users, (user) => {
     console.log('[!] Running for user:', user.username);
     try {
-      const emptyNext = user.next_claim === null || user.next_daily === null;
+      const emptyNext = !user.next_claim || !user.next_daily;
       const nextClaim = user.next_claim ? moment(user.next_claim).toDate() : null;
       const nextDaily = user.next_daily ? moment(user.next_daily).toDate() : null;
   
@@ -32,8 +32,8 @@ const run = async () => {
 
       if (emptyNext) {
         client = new Discord.Client(user.token);
-        client.on.ready = async function (ctx) {
-          console.log("[!] Client online! SETUP...", ctx);
+        client.on.ready = async function () {
+          console.log('[!] Client online! SETUP...');
           await Promise.delay(5000);
           client.send(CHANNELID, {
             content: `${PREFIX}cd`,
@@ -62,7 +62,7 @@ const run = async () => {
         const pastDateDaily = moment().isAfter(nextDaily);
     
         if (!pastDateClaim && !pastDateClaim) {
-          console.log('Belum ready');
+          console.log('Not ready');
           return false;
         }
   
@@ -70,8 +70,8 @@ const run = async () => {
         client = new Discord.Client(user.token);
         const update = { updated_at: new Date() };
   
-        client.on.ready = async function (ctx) {
-          console.log("Client online!", ctx);
+        client.on.ready = async function () {
+          console.log('Client online!');
   
           if (nextClaim) {
             console.log('pastDateClaim', pastDateClaim);

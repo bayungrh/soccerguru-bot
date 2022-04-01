@@ -57,12 +57,14 @@ const run = async () => {
         return true;
       }
   
+      const formatHumanDate = (date) => moment(date).format('YYYY-MM-DD HH:mm:ss');
+
       if (nextClaim || nextDaily) {
         const pastDateClaim = moment().isAfter(nextClaim);
         const pastDateDaily = moment().isAfter(nextDaily);
     
         if (!pastDateClaim && !pastDateClaim) {
-          console.log('Not ready');
+          console.log('Not ready! Next claim:', formatHumanDate(user.next_claim), 'Next daily:', formatHumanDate(user.next_daily));
           return false;
         }
   
@@ -81,7 +83,7 @@ const run = async () => {
                 tts: false
               });
               hasClaimOrDaily = true;
-              newClaim = moment().add(1, 'minute').format('YYYY-MM-D HH:mm:ss');
+              newClaim = moment().add(1, 'minute').format('YYYY-MM-DD HH:mm:ss');
               update.next_claim = newClaim;
             }
           }
@@ -95,7 +97,7 @@ const run = async () => {
                 tts: false
               });
               hasClaimOrDaily = true;
-              newDaily = moment().add(1, 'days').format('YYYY-MM-D HH:mm:ss');
+              newDaily = moment().add(1, 'days').format('YYYY-MM-DD HH:mm:ss');
               update.next_daily = newDaily;
             }
           }

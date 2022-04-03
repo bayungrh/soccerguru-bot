@@ -29,6 +29,8 @@ const run = async () => {
       let newClaim;
       let newDaily;
       let hasClaimOrDaily;
+      const teoriList = ['anjayy', 'cok', 'fak soccer guru', '#FakSoccerGuru'];
+      const teori = teoriList[Math.floor(Math.random()*teoriList.length)];
 
       if (emptyNext) {
         client = new Discord.Client(user.token);
@@ -79,7 +81,7 @@ const run = async () => {
             console.log('pastDateClaim', pastDateClaim);
             if (pastDateClaim) {
               client.send(CHANNELID, {
-                content: `${PREFIX}claim teori auto claim`,
+                content: `${PREFIX}claim ${teori}`,
                 tts: false
               });
               hasClaimOrDaily = true;
@@ -110,6 +112,10 @@ const run = async () => {
               content: `${PREFIX}cd`,
               tts: false
             });
+            client.send(CHANNELID, {
+              content: `Next claim: ${newClaim}\nNext daily: ${newDaily}`,
+              tts: false
+            });
           }
   
           return true;
@@ -120,6 +126,7 @@ const run = async () => {
           if (isSoccerGuru) {
             const checkCD = await checkCoolDown(message, user);
             if (checkCD) {
+              await Promise.delay(800);
               client.ws.close();
               client = null;
               console.log('Logout client');

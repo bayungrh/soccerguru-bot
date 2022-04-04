@@ -29,7 +29,7 @@ const run = async () => {
       let newClaim;
       let newDaily;
       let hasClaimOrDaily;
-      const teoriList = ['anjayy', 'cok', 'fak soccer guru', '#FakSoccerGuru'];
+      const teoriList = ['anjayy', 'cok', 'fak soccer guru', '#FakSoccerGuru', 'lejen', 'ganteng'];
       const teori = teoriList[Math.floor(Math.random()*teoriList.length)];
 
       if (emptyNext) {
@@ -85,7 +85,7 @@ const run = async () => {
                 tts: false
               });
               hasClaimOrDaily = true;
-              newClaim = moment().add(1, 'minute').format('YYYY-MM-DD HH:mm:ss');
+              newClaim = moment().add(1, 'hour').format('YYYY-MM-DD HH:mm:ss');
               update.next_claim = newClaim;
             }
           }
@@ -112,8 +112,10 @@ const run = async () => {
               content: `${PREFIX}cd`,
               tts: false
             });
+            await Promise.delay(500);
+            const nextDailyTxt = newDaily || formatHumanDate(user.next_daily);
             client.send(CHANNELID, {
-              content: `Next claim: ${newClaim}\nNext daily: ${newDaily}`,
+              content: `Next claim: ${newClaim}\nNext daily: ${nextDailyTxt}`,
               tts: false
             });
           }

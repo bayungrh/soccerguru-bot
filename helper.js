@@ -18,33 +18,33 @@ module.exports.checkCoolDown = async (message, user) => {
       update.timeout_claim = timeoutClaim;
 
       if (timeoutClaim === 'Ready') {
-        update.next_claim = moment().toDate();
+        update.next_claim = moment().format('YYYY-MM-DD HH:mm:ss');
       } else {
         const [hourClaim, minuteClaim, secClaim] = timeoutClaim.split(':');
         const nextClaim = moment()
           .add(parseInt(hourClaim), 'hours')
           .add(parseInt(minuteClaim), 'minutes')
           .add(parseInt(secClaim), 'seconds')
-          .format('YYYY-MM-D HH:mm:ss');
+          .format('YYYY-MM-DD HH:mm:ss');
         console.log('nextClaim', nextClaim);
         update.next_claim = nextClaim;
       }
     }
-    
+
     if (findDaily) {
       let timeoutDaily = findDaily.value;
       timeoutDaily = timeoutDaily.replace(/\*/g, '');
       update.timeout_daily = timeoutDaily;
 
       if (timeoutDaily === 'Ready') {
-        update.next_daily = moment().toDate();
+        update.next_daily = moment().format('YYYY-MM-DD HH:mm:ss');
       } else {
         const [hourClaim, minuteClaim, secClaim] = timeoutDaily.split(':');
         const nextDaily = moment()
           .add(parseInt(hourClaim), 'hours')
           .add(parseInt(minuteClaim), 'minutes')
           .add(parseInt(secClaim), 'seconds')
-          .format('YYYY-MM-D HH:mm:ss');
+          .format('YYYY-MM-DD HH:mm:ss');
         console.log('nextDaily', nextDaily);
         update.next_daily = nextDaily;
       }

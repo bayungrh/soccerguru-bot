@@ -24,7 +24,7 @@ const run = async () => {
       const emptyNext = !user.next_claim || !user.next_daily;
       const nextClaim = user.next_claim ? moment(user.next_claim).toDate() : null;
       const nextDaily = user.next_daily ? moment(user.next_daily).toDate() : null;
-  
+
       let client;
       let newClaim;
       let newDaily;
@@ -64,8 +64,8 @@ const run = async () => {
       if (nextClaim || nextDaily) {
         const pastDateClaim = moment().isAfter(nextClaim);
         const pastDateDaily = moment().isAfter(nextDaily);
-    
-        if (!pastDateClaim && !pastDateClaim) {
+
+        if (!pastDateClaim && !pastDateDaily) {
           console.log('Not ready! Next claim:', formatHumanDate(user.next_claim), 'Next daily:', formatHumanDate(user.next_daily));
           return false;
         }

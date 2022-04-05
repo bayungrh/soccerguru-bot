@@ -118,12 +118,10 @@ const run = async () => {
             });
             await Promise.delay(500);
             const nextDailyTxt = newDaily || formatHumanDate(user.next_daily);
-            if (user.username === 'BayuN') {
-              client.send(CHANNELID, {
-                content: `Next claim: ${newClaim}\nNext daily: ${nextDailyTxt}`,
-                tts: false
-              });
-            }
+            client.send(CHANNELID, {
+              content: `Next claim: ${newClaim}\nNext daily: ${nextDailyTxt}`,
+              tts: false
+            });
           }
 
           return true;

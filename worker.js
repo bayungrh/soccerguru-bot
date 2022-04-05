@@ -30,7 +30,7 @@ const run = async () => {
       let newDaily;
       let hasClaimOrDaily;
       const teoriList = ['anjayy', 'cok', 'fak soccer guru', '#FakSoccerGuru', 'lejen', 'ganteng'];
-      let teori;
+      let teori = '';
       
       if (user.username === 'BayuN') {
         teori = teoriList[Math.floor(Math.random()*teoriList.length)];

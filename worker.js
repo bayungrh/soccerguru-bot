@@ -30,7 +30,11 @@ const run = async () => {
       let newDaily;
       let hasClaimOrDaily;
       const teoriList = ['anjayy', 'cok', 'fak soccer guru', '#FakSoccerGuru', 'lejen', 'ganteng'];
-      const teori = teoriList[Math.floor(Math.random()*teoriList.length)];
+      let teori;
+      
+      if (user.username === 'BayuN') {
+        teori = teoriList[Math.floor(Math.random()*teoriList.length)];
+      }
 
       if (emptyNext) {
         client = new Discord.Client(user.token);

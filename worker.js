@@ -147,6 +147,7 @@ const run = async () => {
       }
     } catch (error) {
       console.log('Error for user', user.username, error.message);
+      return false;
     }
 
     return false;
@@ -162,6 +163,8 @@ const run = async () => {
   run();
   cron.schedule('*/5 * * * *', () => {
     console.log('[!] Start task', new Date().toLocaleString());
-    return run();
+    try {
+      return run();
+    } catch (error) { return false; }
   });
 })();

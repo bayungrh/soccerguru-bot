@@ -117,9 +117,10 @@ const run = async () => {
               tts: false
             });
             await Promise.delay(500);
+            const nextClaimTxt = newClaim || formatHumanDate(user.next_claim);
             const nextDailyTxt = newDaily || formatHumanDate(user.next_daily);
             client.send(CHANNELID, {
-              content: `Next claim: ${newClaim}\nNext daily: ${nextDailyTxt}`,
+              content: `Next claim: ${nextClaimTxt}\nNext daily: ${nextDailyTxt}`,
               tts: false
             });
           }

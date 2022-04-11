@@ -28,20 +28,24 @@ const run = async () => {
       let delayDaily = 1000;
 
       if (user.next_claim) {
-        const secClaim = moment(user.next_claim).format('ss');
-        delayClaim = parseInt(secClaim, 10) * 1000;
-        let nextClaimStr = formatHumanDate(user.next_claim).toString();
-        nextClaimStr = nextClaimStr.slice(0, -3);
-        nextClaimStr = `${nextClaimStr}:00`;
-        user.next_claim = new Date(nextClaimStr);
+        if (moment(user.next_claim).format('HH:mm') === moment().format('HH:mm')) {
+          const secClaim = moment(user.next_claim).format('ss');
+          delayClaim = parseInt(secClaim, 10) * 1000;
+          let nextClaimStr = formatHumanDate(user.next_claim).toString();
+          nextClaimStr = nextClaimStr.slice(0, -3);
+          nextClaimStr = `${nextClaimStr}:00`;
+          user.next_claim = new Date(nextClaimStr);
+        }
       }
       if (user.next_daily) {
-        const secDaily = moment(user.next_daily).format('ss');
-        delayDaily = parseInt(secDaily, 10) * 1000;
-        let nextDailyStr = formatHumanDate(user.next_daily).toString();
-        nextDailyStr = nextDailyStr.slice(0, -3);
-        nextDailyStr = `${nextDailyStr}:00`;
-        user.next_daily = new Date(nextDailyStr);
+        if (moment(user.next_daily).format('HH:mm') === moment().format('HH:mm')) {
+          const secDaily = moment(user.next_daily).format('ss');
+          delayDaily = parseInt(secDaily, 10) * 1000;
+          let nextDailyStr = formatHumanDate(user.next_daily).toString();
+          nextDailyStr = nextDailyStr.slice(0, -3);
+          nextDailyStr = `${nextDailyStr}:00`;
+          user.next_daily = new Date(nextDailyStr);
+        }
       }
 
       const nextClaim = user.next_claim ? moment(user.next_claim).toDate() : null;

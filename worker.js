@@ -142,13 +142,6 @@ const run = async () => {
               content: `${PREFIX}cd`,
               tts: false
             });
-            await Promise.delay(500);
-            const nextClaimTxt = newClaim || formatHumanDate(user.next_claim);
-            const nextDailyTxt = newDaily || formatHumanDate(user.next_daily);
-            client.send(CHANNELID, {
-              content: `Next claim: ${nextClaimTxt}\nNext daily: ${nextDailyTxt}`,
-              tts: false
-            });
           }
 
           return true;
@@ -158,8 +151,16 @@ const run = async () => {
           const isSoccerGuru = message.member.nick === process.env.SG_NICKNAME;
           if (isSoccerGuru) {
             const checkCD = await checkCoolDown(message, user);
+            const nextClaimTxt = newClaim || formatHumanDate(user.next_claim);
+            const nextDailyTxt = newDaily || formatHumanDate(user.next_daily);
+
             if (checkCD) {
               await Promise.delay(800);
+              client.send(CHANNELID, {
+                content: `Next claim: ${nextClaimTxt}\nNext daily: ${nextDailyTxt}`,
+                tts: false
+              });
+
               client.ws.close();
               client = null;
               console.log('Logout client');

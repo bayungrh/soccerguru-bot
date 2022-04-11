@@ -18,10 +18,32 @@ const getAllUsers = () => db.from('sg_users').where('is_active', true).whereNot(
 const run = async () => {
   const users = await getAllUsers();
 
-  await Promise.mapSeries(users, (user) => {
+  const formatHumanDate = (date) => moment(date).format('YYYY-MM-DD HH:mm:ss');
+
+  await Promise.map(users, (user) => {
     console.log('[!] Running for user:', user.username);
     try {
       const emptyNext = !user.next_claim || !user.next_daily;
+      let delayClaim = 0;
+      let delayDaily = 1000;
+
+      if (user.next_claim) {
+        const secClaim = moment(user.next_claim).format('ss');
+        delayClaim = parseInt(secClaim, 10) * 1000;
+        let nextClaimStr = formatHumanDate(user.next_claim).toString();
+        nextClaimStr = nextClaimStr.slice(0, -3);
+        nextClaimStr = `${nextClaimStr}:00`;
+        user.next_claim = new Date(nextClaimStr);
+      }
+      if (user.next_daily) {
+        const secDaily = moment(user.next_daily).format('ss');
+        delayDaily = parseInt(secDaily, 10) * 1000;
+        let nextDailyStr = formatHumanDate(user.next_daily).toString();
+        nextDailyStr = nextDailyStr.slice(0, -3);
+        nextDailyStr = `${nextDailyStr}:00`;
+        user.next_daily = new Date(nextDailyStr);
+      }
+
       const nextClaim = user.next_claim ? moment(user.next_claim).toDate() : null;
       const nextDaily = user.next_daily ? moment(user.next_daily).toDate() : null;
 
@@ -31,7 +53,7 @@ const run = async () => {
       let hasClaimOrDaily;
       const teoriList = ['anjayy', 'cok', 'fak soccer guru', '#FakSoccerGuru', 'lejen', 'ganteng'];
       let teori = '';
-      
+
       if (user.username === 'BayuN') {
         teori = teoriList[Math.floor(Math.random()*teoriList.length)];
       }
@@ -63,7 +85,6 @@ const run = async () => {
         return true;
       }
   
-      const formatHumanDate = (date) => moment(date).format('YYYY-MM-DD HH:mm:ss');
 
       if (nextClaim || nextDaily) {
         const pastDateClaim = moment().isAfter(nextClaim);
@@ -84,6 +105,7 @@ const run = async () => {
           if (nextClaim) {
             console.log('pastDateClaim', pastDateClaim);
             if (pastDateClaim) {
+              await Promise.delay(delayClaim);
               client.send(CHANNELID, {
                 content: `${PREFIX}claim ${teori}`,
                 tts: false
@@ -95,7 +117,7 @@ const run = async () => {
           }
       
           if (nextDaily) {
-            await Promise.delay(1000);
+            await Promise.delay(delayDaily);
             console.log('pastDateDaily', pastDateDaily);
             if (pastDateDaily) {
               client.send(CHANNELID, {

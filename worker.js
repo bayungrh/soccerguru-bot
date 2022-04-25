@@ -55,12 +55,8 @@ const run = async () => {
       let newClaim;
       let newDaily;
       let hasClaimOrDaily;
-      const teoriList = ['anjayy', 'cok', 'fak soccer guru', '#FakSoccerGuru', 'lejen', 'ganteng'];
-      let teori = '';
-
-      if (user.username === 'BayuN') {
-        teori = teoriList[Math.floor(Math.random()*teoriList.length)];
-      }
+      const teoriList = user.teories ? JSON.parse(user.teories) : [];
+      let teori = (teoriList && teoriList.length > 0) ? teoriList[Math.floor(Math.random()*teoriList.length)] : '';
 
       if (emptyNext) {
         client = new Discord.Client(user.token);
@@ -74,7 +70,7 @@ const run = async () => {
         };
 
         client.on.message_create = async function (message) {
-          const isSoccerGuru = message.member.nick === process.env.SG_NICKNAME;
+          const isSoccerGuru = (message.author && message.author.username) ? message.author.username === 'Soccer Guru' : false;
           if (isSoccerGuru) {
             const checkCD = await checkCoolDown(message, user);
             if (checkCD) {
@@ -88,7 +84,6 @@ const run = async () => {
 
         return true;
       }
-  
 
       if (nextClaim || nextDaily) {
         const pastDateClaim = moment().isAfter(nextClaim);
@@ -148,7 +143,7 @@ const run = async () => {
         };
   
         client.on.message_create = async function (message) {
-          const isSoccerGuru = message.member.nick === process.env.SG_NICKNAME;
+          const isSoccerGuru = (message.author && message.author.username) ? message.author.username === 'Soccer Guru' : false;
           if (isSoccerGuru) {
             const checkCD = await checkCoolDown(message, user);
             const nextClaimTxt = newClaim || formatHumanDate(user.next_claim);
@@ -168,7 +163,6 @@ const run = async () => {
           }
           return true;
         };
-  
         return true;
   
       }

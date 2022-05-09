@@ -95,7 +95,12 @@ const run = async () => {
         }
   
         console.log('[!] Connecting to discord client', user.user_id, user.username);
-        client = new Discord.Client(user.token);
+        try {
+          client = new Discord.Client(user.token);
+        } catch (error) {
+          console.log('[!] Error connecting to discord client', error.message);
+          return false;
+        }
         const update = { updated_at: new Date() };
   
         client.on.ready = async function () {

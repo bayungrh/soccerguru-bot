@@ -59,7 +59,12 @@ const run = async () => {
       let teori = (teoriList && teoriList.length > 0) ? teoriList[Math.floor(Math.random()*teoriList.length)] : '';
 
       if (emptyNext) {
-        client = new Discord.Client(user.token);
+        try {
+          client = new Discord.Client(user.token);
+        } catch (error) {
+          console.log('[!] Error connecting to discord client', error.message);
+          return false;
+        }
         client.on.ready = async function () {
           console.log('[!] Client online! SETUP...');
           await Promise.delay(5000);

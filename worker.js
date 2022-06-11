@@ -20,7 +20,7 @@ const run = async () => {
 
   const formatHumanDate = (date) => moment(date).format('YYYY-MM-DD HH:mm:ss');
 
-  await Promise.map(users, (user) => {
+  await Promise.mapSeries(users, (user) => {
     console.log('[!] Running for user:', user.username);
     try {
       const emptyNext = !user.next_claim || !user.next_daily;
@@ -173,8 +173,8 @@ const run = async () => {
           }
           return true;
         };
+
         return true;
-  
       }
     } catch (error) {
       console.log('Error for user', user.username, error.message);
@@ -192,10 +192,10 @@ const run = async () => {
   console.log('[+] Job is running, running a task every 5 minute', new Date().toLocaleString());
   // initiate run
   run();
-  cron.schedule('*/5 * * * *', () => {
+  cron.schedule('*/5 * * * *', async () => {
     console.log('[!] Start task', new Date().toLocaleString());
     try {
-      return run();
+      await run();
     } catch (error) { return false; }
   });
 })();

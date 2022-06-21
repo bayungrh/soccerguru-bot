@@ -20,7 +20,7 @@ const run = async () => {
 
   const formatHumanDate = (date) => moment(date).format('YYYY-MM-DD HH:mm:ss');
 
-  await Promise.mapSeries(users, (user) => {
+  await Promise.mapSeries(users, async (user) => {
     console.log('[!] Running for user:', user.username);
     try {
       const emptyNext = !user.next_claim || !user.next_daily;
@@ -102,12 +102,23 @@ const run = async () => {
         console.log('[!] Connecting to discord client', user.user_id, user.username);
         try {
           client = new Discord.Client(user.token);
+          await Promise.delay(500);
+
+          client.ws.on('error', (err) => {
+            console.log('ws error', err.message);
+            throw err;
+          });
+
         } catch (error) {
           console.log('[!] Error connecting to discord client', error.message);
           return false;
         }
         const update = { updated_at: new Date() };
   
+        client.on.discord_disconnect = function () {
+          console.log('on discord_disconnect');
+        }
+
         client.on.ready = async function () {
           console.log('Client online!');
   

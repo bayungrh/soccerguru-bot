@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('knex')({
   client: 'mysql2',
   connection: {
